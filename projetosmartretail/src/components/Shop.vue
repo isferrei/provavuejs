@@ -1,9 +1,43 @@
 <template>
-
+<div class="content">
+  <div class="wrapper">
+    <h3 class="logo">LOJA.COM</h3>
+    <p class="location">Av. Pinheiro Laranja, nº 50</p>
+    <div class="row up-bar">
+        <input type="text" class="search-bar">
+        <img src="../assets/filter.png" class="filter">
+    </div>
+    <table>
+        <thead class="categories">
+            <th><img src="../assets/bottle.svg"><p>Bebidas</p></th>
+            <th><img src="../assets/pineapple.svg"><p>Frutas</p></th>
+            <th><img src="../assets/cleaning.svg"><p>Limpeza</p></th>
+            <th><img src="../assets/fridge.svg"><p>Congelados</p></th>
+        </thead>
+        <tr v-for="produto of produtos" :key="produto.IdProduto">
+            <td> 
+                <img class="miniatura" name="imagem" :src="produto.NomeStr">
+                <div class="text-box">
+                <div v-if="NomeStr">
+                    <p class="title">{{produto.NomeStr}}</p>
+                </div>
+                    <p class="price">R${{produto.PrecoDoub}}</p>
+                    <p class="promotional">R$ 12,50</p>
+                </div>
+                <div class="icons-box">
+                    <div class="btn-favorite"></div>
+                    <div class="btn-add"><div class="qtd"><p>2</p></div></div>
+                </div>
+            </td>
+        </tr>
+    </table> 
+    </div>
+    <Cart />
+</div>
 </template>
 
 <script>
-
+import Cart from './Cart.vue';
 import axios from 'axios';
 export default {
     components: {
@@ -12,16 +46,19 @@ export default {
     data () {
     return {
             info: '',
-            produtos: []
+            produtos: [],
+            produto: '',
+            NomeStr: '',
+            IdImagem: ''
         }
     },
 
-async mounted () {
+    async mounted () {
       const usuario =  { UsuarioStr: "prova", SenhaStr: "passprova" };
       const url = "https://boardapihomolog.smartretail.app/api/";
         
-      const responseLogin = await axios.post(url + 'usuarioapimobile/login', usuario);
-      if(responseLogin) {
+    const responseLogin = await axios.post(url + 'usuarioapimobile/login', usuario);
+    if(responseLogin) {
         const { data } = responseLogin.data;
         const sendData = {
           IdEntrega: 0,
@@ -30,19 +67,31 @@ async mounted () {
           ListaIdCategoria: [],
           ListaIdEncarte: [],
           NomeProdutoPesquisaStr: '',
-          NomeProdutoStr: '',
+          IdPromocao:'',
+          IdProduto: '',
+          NomeStr: '',
+          IdImagem: '',
           OrdemSecao: 0
         };
         const responseData = await axios.post(url + "PromocoesGeraisMobile?idLoja=10719&pagina=0&quantidadePorPagina=150",
          sendData, { 
           headers: {'Authorization': `Bearer ${data.TokenStr}`
-          }
-        })
-        console.log(responseData);
+          }})
+          .then(response => {
+            this.produtos =(response.data.data.promocoesGerais)
+            return { response }
+          })
+          .catch((err) => {
+              console.error(err)
+          })
+        console.log(this.produtos)
+        console.log('INFO', responseData)
+
+
         
-}
-        this.produtos = this.responseData
     }
+    },
+   
 }
 </script>
 
