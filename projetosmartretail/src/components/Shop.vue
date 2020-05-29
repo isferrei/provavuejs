@@ -16,11 +16,11 @@
         </thead>
         <tr v-for="produto of produtos" :key="produto.IdProduto">
             <td> 
-                <img class="miniatura" name="imagem" :src="produto.NomeStr">
+            <div v-if="produto.ImagemPrincipal.NomeStr">
+                <img class="miniatura" :src="produto.ImagemPrincipal.NomeStr"/>
+            </div>
                 <div class="text-box">
-                <div v-if="NomeStr">
-                    <p class="title">{{produto.NomeStr}}</p>
-                </div>
+                    <p class="title" v-if="produto.Estoques.Produto.NomeStr">{{produto.Estoques.Produto.NomeStr}}</p>
                     <p class="price">R${{produto.PrecoDoub}}</p>
                     <p class="promotional">R$ 12,50</p>
                 </div>
@@ -49,7 +49,6 @@ export default {
             produtos: [],
             produto: '',
             NomeStr: '',
-            IdImagem: ''
         }
     },
 
@@ -66,11 +65,12 @@ export default {
           IdVitrine: null,
           ListaIdCategoria: [],
           ListaIdEncarte: [],
+          ImagemPrincipal: [],
           NomeProdutoPesquisaStr: '',
           IdPromocao:'',
-          IdProduto: '',
+          IdProduto: 0,
           NomeStr: '',
-          IdImagem: '',
+          IdImagem: 0,
           OrdemSecao: 0
         };
         const responseData = await axios.post(url + "PromocoesGeraisMobile?idLoja=10719&pagina=0&quantidadePorPagina=150",
@@ -79,18 +79,29 @@ export default {
           }})
           .then(response => {
             this.produtos =(response.data.data.promocoesGerais)
-            return { response }
+            this.renderprodutos = true
           })
           .catch((err) => {
               console.error(err)
           })
         console.log(this.produtos)
-        console.log('INFO', responseData)
+        console.log(responseData)
 
-
-        
     }
+    return 
     },
+    methods: {
+        filtro(){
+            
+        },
+        forceRerender() {
+        this.renderprodutos = false;
+        
+        this.$nextTick(() => {
+          this.renderprodutos = true;
+        });
+      }
+    }
    
 }
 </script>
