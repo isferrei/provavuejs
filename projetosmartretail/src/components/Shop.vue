@@ -1,77 +1,9 @@
 <template>
-<div class="content">
-  <div class="wrapper">
-    <h3 class="logo">LOJA.COM</h3>
-    <p class="location">Av. Pinheiro Laranja, nº 50</p>
-    <div class="row up-bar">
-        <input type="text" class="search-bar">
-        <img src="../assets/filter.png" class="filter">
-    </div>
-    <table>
-        <thead class="categories">
-            <th><img src="../assets/bottle.svg"><p>Bebidas</p></th>
-            <th><img src="../assets/pineapple.svg"><p>Frutas</p></th>
-            <th><img src="../assets/cleaning.svg"><p>Limpeza</p></th>
-            <th><img src="../assets/fridge.svg"><p>Congelados</p></th>
-        </thead>
-        <tr>
-            <td>
-                <img class="miniatura" src="../assets/cerveja.png">
-                <div class="text-box">
-                    <p class="title">Cerveja</p>
-                    <p class="price">R$ 10,00</p>
-                    <p class="promotional">R$ 12,50</p>
-                </div>
-                <div class="icons-box">
-                    <div class="btn-favorite"></div>
-                    <div class="btn-add"><div class="qtd"><p>2</p></div></div>
-                </div>
-            </td>
-            <td>
-                <img class="miniatura" src="../assets/ninho.png">
-                <div class="text-box">
-                    <p class="title">Leite ninho</p>
-                    <p class="price">R$ 10,00</p>
-                    <p class="promotional">R$ 12,50</p>
-                </div>
-                <div class="icons-box">
-                    <div class="btn-favorite"></div>
-                    <div class="btn-add"></div>
-                </div>
-            </td>
-            <td>
-                <img class="miniatura" src="../assets/coca.png">
-                <div class="text-box">
-                    <p class="title">Coca-cola</p>
-                    <p class="price">R$ 10,00</p>
-                    <p class="promotional">R$ 12,50</p>
-                </div>
-                <div class="icons-box">
-                    <div class="btn-favorite"></div>
-                    <div class="btn-add"></div>
-                </div>
-            </td>
-            <td>
-                <img class="miniatura" src="../assets/cafe.png">
-                <div class="text-box">
-                    <p class="title">Café Pilão</p>
-                    <p class="price">R$ 10,00</p>
-                    <p class="promotional">R$ 12,50</p>
-                </div>
-                <div class="icons-box">
-                    <div class="btn-favorite"></div>
-                    <div class="btn-add"></div>
-                </div>
-            </td>
-        </tr>
-    </table> 
-    </div>
-    <Cart />
-</div>
+
 </template>
 
 <script>
-import Cart from './Cart.vue';
+
 import axios from 'axios';
 export default {
     components: {
@@ -79,48 +11,41 @@ export default {
     },
     data () {
     return {
-            info: '' 
+            info: '',
+            produtos: []
         }
     },
 
-    mounted () {
-        const usuario =  { UsuarioStr: "prova", SenhaStr: "passprova" };
+async mounted () {
+      const usuario =  { UsuarioStr: "prova", SenhaStr: "passprova" };
+      const url = "https://boardapihomolog.smartretail.app/api/";
+        
+      const responseLogin = await axios.post(url + 'usuarioapimobile/login', usuario);
+      if(responseLogin) {
+        const { data } = responseLogin.data;
         const sendData = {
-        IdEntrega: 0,
-        IdTipoProduto: 0,
-        IdVitrine: null,
-        ListaIdCategoria: [],
-        ListaIdEncarte: [],
-        NomeProdutoPesquisaStr: '',
-        NomeProdutoStr: '',
-        OrdemSecao: 0
+          IdEntrega: 0,
+          IdTipoProduto: 0,
+          IdVitrine: null,
+          ListaIdCategoria: [],
+          ListaIdEncarte: [],
+          NomeProdutoPesquisaStr: '',
+          NomeProdutoStr: '',
+          OrdemSecao: 0
         };
-
-      axios
-        .post('https://boardapihomolog.smartretail.app/api/usuarioapimobile/login', usuario)
-        .then(response => {this.info = localStorage.getItem(JSON.stringify(response.data.data.TokenStr))})
-        .catch(error => console.log(error))
-
-        // const instance = axios.create({
-        // baseURL: 'https://boardapihomolog.smartretail.app/api/PromocoesGeraisMobile?idLoja=10719&pagina=0&quantidadePorPagina=150',
-        // timeout: 1000,
-        // headers: {'Authorization': 'Bearer '+token}
-        // });
-
-        // instance.get('/path')
-        // .then(response => {
-        //     return response.data;
-        // })
-      axios
-        .post('https://boardapihomolog.smartretail.app/api/PromocoesGeraisMobile?idLoja=10719&pagina=0&quantidadePorPagina=150', 
-             {headers:{'Authorization': 'Bearer'+ this.info}}, sendData)
-        .then(response => (console.log(response)))
-        .catch(error => console.log(error))
+        const responseData = await axios.post(url + "PromocoesGeraisMobile?idLoja=10719&pagina=0&quantidadePorPagina=150",
+         sendData, { 
+          headers: {'Authorization': `Bearer ${data.TokenStr}`
+          }
+        })
+        console.log(responseData);
+        
+}
+        this.produtos = this.responseData
     }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
     *{
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
