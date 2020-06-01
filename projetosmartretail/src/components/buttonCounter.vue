@@ -1,23 +1,22 @@
 <template>
-<div>
-<button @click="addToCart" class="btn-add"><p>+</p></button>
-</div>               
+    <div @click="addToCart(produto)"  class="btn-add"><p>+</p></div>
 </template>
 <script>
 import State from "../shoppingCartState.js";
 export default {
     data: function () {
     return {
-      count: 0
+      count: 0,
+      shared: State.data
     }
   },
 
   methods: {
-      
-       addToCart () {
+        addToCart () {
         State.add(this.produto)
-      },
+      }
   }
+
 }
 </script>
 
@@ -28,6 +27,8 @@ export default {
     flex-wrap: wrap;
     align-items: center;
 }
+
+
     .btn-add{
         background: url("../assets/plus.png");
         width: 24px;
@@ -56,4 +57,4 @@ export default {
         justify-content: center;
     }
 
-</style>>
+</style>

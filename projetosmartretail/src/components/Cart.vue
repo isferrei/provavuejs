@@ -41,7 +41,7 @@
         margin: 0px 0px 0px -4.5% !important;
         background-color: #FF906A;
         position: fixed;
-        top: 580px;
+        top: 589px;
         box-shadow: 1px -1px 5px -1px #8888 ;
         justify-content: center;
         align-items: center;

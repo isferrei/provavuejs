@@ -15,7 +15,7 @@
                     <p class="item-title">Produto: <span>{{item.title}}</span></p>
                     <p class="item-price">Valor: 
                         <span>{{item.qtd}} x</span>
-                        <span class="right"> R${{item.qtd * item.price}}</span>
+                        <span class="right"> R${{item.price}}</span>
                     </p>
                 </div>
             </div>
@@ -123,6 +123,10 @@ export default {
     
     .miniatura{ 
         margin: 15px;
+    }
+
+    .item{
+        display: flex;
     }
 
     .item p{

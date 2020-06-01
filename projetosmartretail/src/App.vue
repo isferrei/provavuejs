@@ -1,20 +1,58 @@
 <template>
- <router-view class="view">
-<Shop />  
-<Carrinho />
-</router-view>
+<div>
+    <router-view class="view">
+    <Carrinho />
+    </router-view>
+  <div class="content">
+  <div class="wrapper">
+    <h3 class="logo">LOJA.COM</h3>
+    <p class="location">Av. Pinheiro Laranja, nº 50</p>
+
+    <div class="row up-bar">
+        <input type="text" v-model="search" class="search-bar" placeholder="Pesquisar">
+        <button type="button"  data-toggle="modal" data-target="#modalfiltro"><img src="./assets/filter.png" class="filter"></button>
+        
+    </div>
+
+    <table v-if="produtos">
+        <thead class="categories">
+        <div  v-for="produto in produtos" :key="produto.IdTipoProduto">
+            <th><button class="btn-cat">{{produto.Estoques[0].Produto.TipoProduto.NomeTipoProdutoStr}}</button></th>
+        </div>
+        </thead>
+    
+        <tr>
+        <div  v-for="produto in filteredItems" :key="produto.IdProduto">
+          <div v-if="produto" >
+            <Shop :produto="produto"></Shop>
+          </div>
+        </div>
+        </tr>
+    </table>
+    </div>
+    
+    <Filtro />
+    <Cart></Cart>
+    </div>
+
+</div>
+
 </template>
 
 <script>
 import Shop from './components/Shop.vue';
 import Carrinho from './components/Carrinho.vue';
+import Cart from './components/Cart.vue';
+import Filtro from './components/Filtro.vue';
 import axios from 'axios';
 import State from "./shoppingCartState.js";
 export default {
   name: 'App',
   components: {
     Shop,
-    Carrinho
+    Carrinho,
+    Cart,
+    Filtro
   },
    data () {
     return {
@@ -25,7 +63,8 @@ export default {
             category: '',
             NomeStr: '',
             search: '',
-            shared: State.data
+            shared: State.data,
+            values: ''
         }
     },
 
@@ -62,7 +101,28 @@ export default {
           console.log(this.produtos)
         console.log('INFO', responseData)
         }
+    },
+
+    methods: {
+      forceRerender() {
+        this.renderprodutos = false;
+        
+        this.$nextTick(() => {
+          this.renderprodutos = true;
+        });
+      }
+    },
+
+    computed: {
+        filteredItems: function(){
+            return this.produtos.filter((produto) => {
+                return produto.Estoques[0].Produto.NomeStr.toLowerCase() && produto.Estoques[0].Produto.TipoProduto.NomeTipoProdutoStr.toLowerCase().match(this.search);
+            });
+        }
+
+        
     }
+
 }
 </script>
 
