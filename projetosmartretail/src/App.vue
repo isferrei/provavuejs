@@ -22,9 +22,8 @@
         <thead class="categories">
         <div  v-for="produto in filtoCategorias" :key="produto.IdTipoProduto">
             <th>
-            <Filtro />
+            <Filtro></Filtro>
               <button class="btn-cat" @click.prevent="search=produto.toLowerCase()">
-              
                 {{produto}}
               </button>
             </th>
@@ -130,7 +129,7 @@ export default {
     computed: {
         filteredItems: function(){
             return this.produtos.filter((produto) => {
-                return produto.Estoques[0].Produto.NomeStr.toLowerCase() && produto.Estoques[0].Produto.TipoProduto.NomeTipoProdutoStr.toLowerCase().match(this.search);
+                return  produto.Estoques[0].Produto.TipoProduto.NomeTipoProdutoStr.toLowerCase().match(this.search) || produto.Estoques[0].Produto.NomeStr.toLowerCase().match(this.search);
             });
         },
 

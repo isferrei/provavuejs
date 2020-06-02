@@ -12,7 +12,7 @@
       </div>
       <div class="modal-body">
        <div v-for="produto in filtoCategorias" :key="produto.IdTipoProduto">
-          <button class="btns" @click.prevent="search=produto.toLowerCase()">
+          <button class="btns" @click.prevent="search=produto.toLowerCase()" data-dismiss="modal">
             {{produto}}
           </button>
       </div>
@@ -124,6 +124,7 @@ export default {
       font-weight: 400;
       padding: 0px 15px 0px 15px;
       cursor: pointer;
+      margin-bottom: 10px;
     }
 
     .btns:hover{

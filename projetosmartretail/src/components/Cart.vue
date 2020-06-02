@@ -44,6 +44,7 @@
         box-shadow: 1px -1px 5px -1px #8888 ;
         justify-content: center;
         align-items: center;
+        z-index: 1;
     }
 
     .bottom-bar{
