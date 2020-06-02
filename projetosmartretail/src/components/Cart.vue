@@ -38,10 +38,9 @@
     .row{
         height: 60px;
         width: 100%;
-        margin: 0px 0px 0px -4.5% !important;
         background-color: #FF906A;
         position: fixed;
-        top: 589px;
+        top: 0px;
         box-shadow: 1px -1px 5px -1px #8888 ;
         justify-content: center;
         align-items: center;
@@ -57,7 +56,6 @@
         width: 50px;
         height: 50px;
         border-radius: 10px;
-        margin-right: 2%;
     }
 
     .cart:hover{

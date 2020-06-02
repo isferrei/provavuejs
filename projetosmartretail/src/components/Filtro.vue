@@ -11,12 +11,14 @@
         
       </div>
       <div class="modal-body">
-       <div v-for="produto in produtos" :key="produto.IdProduto">
-        <button class="btns" v-if="produto.Estoques[0].Produto.TipoProduto.NomeTipoProdutoStr">{{produto.Estoques[0].Produto.TipoProduto.NomeTipoProdutoStr}}</button>
+       <div v-for="produto in filtoCategorias" :key="produto.IdTipoProduto">
+          <button class="btns" @click.prevent="search=produto.toLowerCase()">
+            {{produto}}
+          </button>
       </div>
       </div>
       <div class="modal-footer">
-        <button class="btn-filtrar"><img src="../assets/slider.png" width="20px" height="20px">FILTRAR</button>
+        <button class="btn-filtrar" v-on:submit.prevent data-dismiss="modal"><img src="../assets/slider.png" width="20px" height="20px">  FILTRAR</button>
       </div>
     </div>
   </div>
@@ -74,6 +76,23 @@ export default {
         console.log('INFO', responseData)
         }
     },
+
+    methods: {
+      submitSearch() {
+      }
+    },
+
+    computed: {
+      groupedItems() {
+          return this.produtos.filter(produto => {
+            return produto.Estoques[0].Produto.TipoProduto.NomeTipoProdutoStr.toLowerCase().indexOf(this.search.toLowerCase()) > -1
+          });
+      },
+
+      filtoCategorias: function () {
+        return [...new Set(this.produtos.map(i=>i.Estoques[0].Produto.TipoProduto.NomeTipoProdutoStr))]
+      },
+    }
 }
 </script>
 <style scoped>

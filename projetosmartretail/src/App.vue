@@ -1,8 +1,12 @@
 <template>
 <div>
-    <router-view class="view">
-    <Carrinho />
-    </router-view>
+<div class="head">
+    <Cart></Cart><div class="itens">{{ quantidade }} itens</div>
+  </div>
+<router-view class="view">
+<Carrinho />
+</router-view>
+  
   <div class="content">
   <div class="wrapper">
     <h3 class="logo">LOJA.COM</h3>
@@ -16,25 +20,27 @@
 
     <table v-if="produtos">
         <thead class="categories">
-        <div  v-for="produto in produtos" :key="produto.IdTipoProduto">
-            <th><button class="btn-cat">{{produto.Estoques[0].Produto.TipoProduto.NomeTipoProdutoStr}}</button></th>
+        <div  v-for="produto in filtoCategorias" :key="produto.IdTipoProduto">
+            <th>
+            <Filtro />
+              <button class="btn-cat" @click.prevent="search=produto.toLowerCase()">
+              
+                {{produto}}
+              </button>
+            </th>
         </div>
         </thead>
     
         <tr>
         <div  v-for="produto in filteredItems" :key="produto.IdProduto">
           <div v-if="produto" >
-            <Shop :produto="produto"></Shop>
+            <Shop :produto="produto" v-on:incrementar="adicionarQuantidade" v-on:decrementar="removerQuantidade"></Shop>
           </div>
         </div>
         </tr>
     </table>
     </div>
-    
-    <Filtro />
-    <Cart></Cart>
     </div>
-
 </div>
 
 </template>
@@ -46,6 +52,7 @@ import Cart from './components/Cart.vue';
 import Filtro from './components/Filtro.vue';
 import axios from 'axios';
 import State from "./shoppingCartState.js";
+
 export default {
   name: 'App',
   components: {
@@ -64,7 +71,8 @@ export default {
             NomeStr: '',
             search: '',
             shared: State.data,
-            values: ''
+            values: '',
+            quantidade: 0
         }
     },
 
@@ -110,7 +118,13 @@ export default {
         this.$nextTick(() => {
           this.renderprodutos = true;
         });
-      }
+      },
+      adicionarQuantidade() {
+        this.quantidade++
+    },
+      removerQuantidade() {
+        this.quantidade--
+    }
     },
 
     computed: {
@@ -118,11 +132,18 @@ export default {
             return this.produtos.filter((produto) => {
                 return produto.Estoques[0].Produto.NomeStr.toLowerCase() && produto.Estoques[0].Produto.TipoProduto.NomeTipoProdutoStr.toLowerCase().match(this.search);
             });
-        }
+        },
 
-        
+        groupedItems() {
+          return this.produtos.filter(produto => {
+            return produto.Estoques[0].Produto.TipoProduto.NomeTipoProdutoStr.toLowerCase().indexOf(this.search.toLowerCase()) > -1
+          });
+          },
+
+        filtoCategorias: function () {
+          return [...new Set(this.produtos.map(i=>i.Estoques[0].Produto.TipoProduto.NomeTipoProdutoStr))]
+      }
     }
-
 }
 </script>
 
@@ -135,4 +156,32 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+
+
+        .itens{
+        color: #000;
+        background-color: #fff;
+        margin: 8px 0px 0px 0px;
+        font-weight: 500;
+        padding: 10px;
+        margin-left: -5%;
+        font-weight: 500;
+        border-radius: 50px;
+        text-align: center;
+        align-self: flex-end;
+        z-index: 1;
+        width: 80px;
+        display: block;
+        position: fixed;
+        top: 0px;
+    }
+
+    .head{
+      display: flex;
+      flex-direction: column;
+    }
+
+  .content{
+    margin: 74px 15px 15px 15px;
+  }
 </style>

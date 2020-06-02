@@ -2,7 +2,7 @@
     <div class="carrinho">
     <div class="row upbar-title">
    
-        <img class="icon-bag" src="../assets/cart.svg"><h2 class="cart-title">SACOLA</h2>
+        <h2 class="cart-title">SACOLA</h2>
         <router-link to="/">
             <img class="btn-back" src="../assets/back.png">
         </router-link>
@@ -106,7 +106,7 @@ export default {
 
     .upbar-title{
         background-color: #FF906A;
-        padding: 15px;
+        padding: 15px 72px 15px 0px;
         align-items: center;
         display: flex;
         flex-direction: row-reverse;
@@ -159,5 +159,7 @@ export default {
     font-weight: bold;
     }
 
-
+    .carrinho{
+        margin-top: 57px;
+    }
 </style>

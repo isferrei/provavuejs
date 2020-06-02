@@ -18,13 +18,13 @@
                     <div class="btn-favorite"></div>
                     <div class="btn-count">
                     
-                        <div @click="addToCart" v-if="qtdInCart == 0" class="btn-add"><p>+</p></div>
+                        <div @click="addToCart();$emit('incrementar')" v-if="qtdInCart == 0" class="btn-add"><p>+</p></div>
                             
                             <div class="clearfix" v-else>
                                 <div class="operation">
-                                    <div class="qtd" @click="inc"><p>+</p></div>
+                                    <div class="qtd" @click="inc();$emit('incrementar')"><p>+</p></div>
                                     <div class="btn-add" v-if="qtdInCart > 0"><p>{{qtdInCart}}</p></div>
-                                    <div class="qtd-dec" @click="dec"><p>-</p></div>
+                                    <div class="qtd-dec" @click="dec();$emit('decrementar')"><p>-</p></div>
                                 </div>
                             </div>
                         </div>
@@ -39,7 +39,6 @@
 <script>
 
 // import axios from 'axios';
-// <div class="itens">{{qtdInCart}} itens</div>
 import _ from "lodash";
 import State from "../shoppingCartState.js";
 
@@ -71,11 +70,15 @@ export default {
             var found = _.find(this.shared.cart, ['id', this.produto.Estoques[0].Produto.IdProduto])
                 if(typeof found == 'object') {
                     return found.qtd
+                   
+                    
                 }else{
                     return 0
                 }
+                 
             }
         }
+    
 }
 </script>
 
@@ -98,6 +101,7 @@ export default {
         max-height: auto;
         max-width: 100%;
         padding-bottom: 50px;
+        display: contents;
     }
 
     .logo{
@@ -372,20 +376,6 @@ export default {
             justify-content: center;
             float: right;
         }
-
-        .itens{
-        color: #000;
-        margin-right: 2%;
-        background-color: #fff;
-        padding: 10px;
-        font-weight: 500;
-        border-radius: 50px;
-        align-self: flex-end;
-        z-index: 1;
-        width: 70px;
-        position: fixed;
-        top: 589px;
-    }
 
     .clearfix:after {
         content: " ";

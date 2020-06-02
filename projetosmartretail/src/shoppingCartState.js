@@ -30,7 +30,7 @@ export default{
           var index = _.indexOf(this.data.cart, found)
     
           if(this.data.cart[index].qtd == 1) {
-            this.data.cart.$remove(found)
+            this.data.cart.splice(index, 1)
           } else {
             this.data.cart[index].qtd--
           }
