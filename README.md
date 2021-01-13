@@ -1,1 +1,1 @@
-# vuejsSmartRetailProva
+# vuejs SmartRetail
